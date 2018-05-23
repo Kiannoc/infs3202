@@ -10,6 +10,7 @@ var user = require('./routes/user')
 var app = express();
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
+
 var connection = mysql.createConnection({
   host:'localhost',
   user:'kianluke3202',
@@ -20,6 +21,7 @@ var connection = mysql.createConnection({
 connection.connect();
 global.db = connection;
 
+//Initialize session
 var session = require('express-session');
 app.use(session({
   secret: 'lukesmells',
@@ -40,20 +42,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(8080);
 
-
+//------ROUTING ----// 
 app.get('/', routes.index);//call for main index page
 app.get('/signup', user.signup);//call for signup page
 app.post('/signup', user.signup);//call for signup post 
-app.get('/login', routes.index);//call for login page
+app.get('/login', user.login);//call for login page
 app.post('/login', user.login);//call for login post
-app.get('/home/dashboard', user.dashboard);//call for dashboard page after login
-app.get('/home/logout', user.logout);//call for logout
-app.get('/home/profile',user.profile);//to render users profile
-// app.use('/', indexRouter);
-// app.use('/signup', usersRouter);
-// app.use('/login', usersRouter);
-// app.use('/dashboard', usersRouter);
+app.get('/dashboard', user.dashboard);//call for dashboard page after login
+app.get('/logout', user.logout);//call for logout
+//app.get('/home/profile',user.profile);//to render users profile
 
+
+//BELOW CURRENTLY USED FOR DEBUGGING... CHANGE TO A NICE 404 PAGE WHEN FINISHED
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
