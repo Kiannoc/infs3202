@@ -139,7 +139,7 @@ exports.signup = function(req, res){
     var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
  
     db.query(sql, function(err, results){
-       res.render('dashboard.ejs', {user:user});    
+       res.render('dashboard.ejs', {user:results});    
     });       
  };
  //------------------------------------logout functionality----------------------------------------------
