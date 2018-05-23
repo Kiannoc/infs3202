@@ -1,7 +1,7 @@
 var validator = require('validator');
 var bcrypt = require('bcrypt');
 
-//---------------------------------------------signup page call------------------------------------------------------
+//---------------------------------------------signup page call----------------
 exports.signup = function(req, res){
     message = '';
     errmessage = '';
@@ -15,7 +15,7 @@ exports.signup = function(req, res){
        var fname= post.first_name;
        var lname= post.last_name;
        var emailUsed;
-        
+
        //trim whitespace from fields (possible for loop here)
        fname = fname.trim();
        lname = lname.trim();
@@ -30,7 +30,7 @@ exports.signup = function(req, res){
           validator.isLength(pass, {min: 1}) &&
           validator.isAlpha(fname) &&
           validator.isAlpha(lname)) {
-            
+
             //CHECK if email is already in use
             var sqlcheck = "SELECT id, fname, lname, email FROM `users` WHERE `email`='"+email+"'";
             db.query(sqlcheck, function(err, results){
@@ -39,7 +39,7 @@ exports.signup = function(req, res){
 
             //if email isn't in use, add user to db
             if(emailUsed == 0) {
-                
+
                 //Hash password
                 var hash = bcrypt.hashSync(pass, salt);
                 var sqlregister = "INSERT INTO `users`(`fname`,`lname`,`email`, `password`) VALUES ('" + fname + "','" + lname + "','" + email + "','" + hash + "')";
@@ -63,8 +63,8 @@ exports.signup = function(req, res){
             res.render('signup.ejs', {errmessage:errmessage});
         }
 
-        
- 
+
+
     } else {
         //IF REQUEST IS ANYTHING BUT POST
         var userID = req.session.userId;
@@ -74,84 +74,82 @@ exports.signup = function(req, res){
        res.render('signup');
     }
  };
-  
- //-----------------------------------------------login page call------------------------------------------------------
- exports.login = function(req, res){
-    var errmessage = '';
- 
-    if(req.method == "POST"){
-       var post  = req.body;
-       var email= post.email;
-       var pass= post.password;
+//-----------------------------------------------login page call---------------
+exports.login = function(req, res){
+  var errmessage = '';
 
-       //TRIM INPUTS
-       email = email.trim();
-       pass = pass.trim();
+  if(req.method == "POST"){
+     var post  = req.body;
+     var email= post.email;
+     var pass= post.password;
+
+     //TRIM INPUTS
+     email = email.trim();
+     pass = pass.trim();
 
 
-      //Check if there exists a user with specified email
-       var sql="SELECT id, fname, lname, email, password FROM `users` WHERE `email`='"+email+"'";                           
-       db.query(sql, function(err, results){ 
-           //if there is a result with specified email     
-          if(results.length){
+    //Check if there exists a user with specified email
+     var sql="SELECT id, fname, lname, email, password FROM `users` WHERE `email`='"+email+"'";
+     db.query(sql, function(err, results){
+         //if there is a result with specified email
+        if(results.length){
 
-              //check password against hash
-              if(bcrypt.compareSync(pass, results[0].password)){
-                //if they match -> set session variables and redirect to dashboard
-                req.session.userId = results[0].id;
-                req.session.user = results[0];
+            //check password against hash
+            if(bcrypt.compareSync(pass, results[0].password)){
+              //if they match -> set session variables and redirect to dashboard
+              req.session.userId = results[0].id;
+              req.session.user = results[0];
 
-                //REMOVE PASSWORD FROM SESSION VARIABLES
-                delete req.session.user.password;
-                
-                res.redirect('/dashboard');
-              }
-              else{
-                  errmessage = 'Incorrect Password';
-                  res.render('index.ejs', {errmessage: errmessage});
-              }
-          }
-          else{
-             errmessage = 'Email not assigned to an Account';
-             res.render('index.ejs',{errmessage: errmessage});
-          }
-                  
-       });
-    } else {
-        //If request is not POST
-        var userID = req.session.userId;
-        if(userID != null){
-            res.redirect('/dashboard');
+              //REMOVE PASSWORD FROM SESSION VARIABLES
+              delete req.session.user.password;
+
+              res.redirect('/dashboard');
+            }
+            else{
+                errmessage = 'Incorrect Password';
+                res.render('index.ejs', {errmessage: errmessage});
+            }
         }
-       res.render('index.ejs',{errmessage: errmessage});
-    }
-            
- };
- //-----------------------------------------------dashboard page functionality----------------------------------------------
-            
- exports.dashboard = function(req, res, next){
-     
-    var user =  req.session.user
-    var userID = req.session.userId;
-    if(userID == null){
-        res.redirect('/login');
-    }
- 
-    var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
- 
-    db.query(sql, function(err, results){
-       res.render('dashboard.ejs', {user:results});    
-    });       
- };
- //------------------------------------logout functionality----------------------------------------------
- exports.logout=function(req,res){
-    req.session.destroy(function(err) {
-       res.redirect("/login");
-    })
- };
- 
+        else{
+           errmessage = 'Email not assigned to an Account';
+           res.render('index.ejs',{errmessage: errmessage});
+        }
 
- //-----------Helper Functions -------//
+     });
+  } else {
+      //If request is not POST
+      var userID = req.session.userId;
+      if(userID != null){
+          res.redirect('/dashboard');
+      }
+     res.render('index.ejs',{errmessage: errmessage});
+  }
+
+ };
+//-----------------------------------------------dashboard page functionality--
+exports.dashboard = function(req, res, next){
+   //console.log(req.session.userId);
+  var user =  req.session.user
+  var userID = req.session.userId;
+  if(userID == null){
+      res.redirect('/login');
+  }
+
+  var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
+
+ 
+  db.query(sql, function(err, results){
+     res.render('dashboard.ejs', {user:results});
+  });
+};
+//-----------------------------------------------logout functionality----------
+exports.logout=function(req,res){
+  req.session.destroy(function(err) {
+     res.redirect("/login");
+  })
+};
+
+//-----------Helper Functions -------//
 
  function welcomeEmail() {
     console.log("This is being run");
