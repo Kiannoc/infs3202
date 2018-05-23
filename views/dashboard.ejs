@@ -123,8 +123,10 @@
             <h1 class="h2">All your Shouts</h1>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
-				        <button class="btn btn-sm btn-outline-secondary">CREATE NEW SHOUT</button>
-                <button class="btn btn-sm btn-outline-secondary">Export PDF</button> <!-- FUNCTION PDF -->
+                <button class="btn btn-sm btn-outline-secondary">CREATE NEW SHOUT</button>
+                <form method="get" action="/pdf">
+                  <button class="btn btn-sm btn-outline-secondary">Export PDF</button> <!-- FUNCTION PDF -->
+                </form>
               </div>
             </div>
           </div>
@@ -152,6 +154,12 @@
                 <tr>
                   <td>7/05/2018</td>
                   <td>Bread</td>
+                  <td>$+4.00</td>
+                  <td>Kian</td>
+                </tr>
+                <tr>
+                  <td>7/05/2018</td>
+                  <td>Testing stuff</td>
                   <td>$+4.00</td>
                   <td>Kian</td>
                 </tr>

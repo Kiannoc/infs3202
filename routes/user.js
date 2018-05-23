@@ -45,6 +45,7 @@ exports.signup = function(req, res){
                 var sqlregister = "INSERT INTO `users`(`fname`,`lname`,`email`, `password`) VALUES ('" + fname + "','" + lname + "','" + email + "','" + hash + "')";
                 db.query(sqlregister, function(err, results) {
                     if(!err){
+                        welcomeEmail();
                     message = "Succesfully! Your account has been created.";
                     res.render('signup.ejs',{message: message});
                     }
@@ -129,7 +130,7 @@ exports.signup = function(req, res){
  //-----------------------------------------------dashboard page functionality----------------------------------------------
             
  exports.dashboard = function(req, res, next){
-     //console.log(req.session.userId);
+     
     var user =  req.session.user
     var userID = req.session.userId;
     if(userID == null){
@@ -151,3 +152,26 @@ exports.signup = function(req, res){
  
 
  //-----------Helper Functions -------//
+
+ function welcomeEmail() {
+    console.log("This is being run");
+    var mailOptions = {
+        from: "Kian Noctor ✔ <kian.noctor@gmail.com>", // sender address
+        to: "kian.noctor@hotmail.com", // list of receivers
+        subject: "New Account Created", // Subject line
+        text: "Hello world ✔", // plaintext body
+        html: "<b>Hello world ✔</b>" // html body
+    }
+    
+    // send mail with defined transport object
+    smtp.sendMail(mailOptions, function(error, response){
+        if(error){
+            console.log(error);
+        }else{
+            console.log("Message sent: " + response.message);
+        }
+    
+        // if you don't want to use this transport object anymore, uncomment following line
+        //smtpTransport.close(); // shut down the connection pool, no more messages
+    });
+ }

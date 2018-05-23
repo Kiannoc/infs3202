@@ -5,11 +5,14 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var routes = require('./routes');
-var user = require('./routes/user')
+var user = require('./routes/user');
+var dashboard = require('./routes/dashboard');
+var pdftest = require('./routes/pdfgen');
 
 var app = express();
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
+var nodemailer = require('nodemailer');
 
 var connection = mysql.createConnection({
   host:'localhost',
@@ -30,6 +33,17 @@ app.use(session({
   cookie: {maxAge: 60000}
 }));
 
+// create reusable transport method (opens pool of SMTP connections)
+let smtpTransport = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+      user: "stinge3202@gmail.com",
+      pass: "infs3202"
+  }
+});
+
+global.smtp = smtpTransport;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -48,9 +62,9 @@ app.get('/signup', user.signup);//call for signup page
 app.post('/signup', user.signup);//call for signup post 
 app.get('/login', user.login);//call for login page
 app.post('/login', user.login);//call for login post
-app.get('/dashboard', user.dashboard);//call for dashboard page after login
+app.get('/dashboard', dashboard.dashboard);//call for dashboard page after login
 app.get('/logout', user.logout);//call for logout
-//app.get('/home/profile',user.profile);//to render users profile
+app.get('/pdf', pdfgen.pdfgen);
 
 
 //BELOW CURRENTLY USED FOR DEBUGGING... CHANGE TO A NICE 404 PAGE WHEN FINISHED
