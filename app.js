@@ -7,7 +7,7 @@ var logger = require('morgan');
 var routes = require('./routes');
 var user = require('./routes/user');
 var dashboard = require('./routes/dashboard');
-var pdftest = require('./routes/pdfgen');
+var pdfgen = require('./routes/pdfgen');
 
 var app = express();
 var mysql = require('mysql');
