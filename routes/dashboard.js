@@ -36,6 +36,9 @@ exports.shout = function(req, res, next){
     }
   */
 
+  userID = req.session.userId;
+
+  // Collect field form data
   var post  = req.body;
   toTrim = [
     receiver = post.receiver,
@@ -44,11 +47,12 @@ exports.shout = function(req, res, next){
     description = post.description
   ];
 
+  // trim field form data
   for(i = 0; i < toTrim.length; i++) {
     toTrim[i] = toTrim[i].trim();
   }
 
-  //LOGIC: check if field form data is valid
+  //LOGIC: booleans - field form data is valid
   var receiverValid = validator.isLength(receiver, {min: 1})
                   && validator.isAlpha(receiver);
   var amountValid = validator.isLength(amount, {min: 1})
@@ -60,37 +64,30 @@ exports.shout = function(req, res, next){
                     && (validator.isFloat(percentage, {min: 0.01, max: 100.00})
                         || validator.isInt(percentage, {min: 1, max: 100}));
   var descriptionValid = validator.isLength(description, {min: 3})
-                    && validator.isAlpha(description));                      
+                    && validator.isAlpha(description));
+  //all fields
   var fieldsValid = receiverValid && amountValid && percentageValid
                     && descriptionValid;
 
   // Check if all entered fields are valid
   if(fieldsValid) {
+
        // check if receiver is a friend
-       // since receiver not friend, return error
-       // create shout with form data
-       //CHECK if email is already in use
-       var sqlcheck = "SELECT id, fname, lname, email FROM `users` WHERE `email`='"+email+"'";
-       db.query(sqlcheck, function(err, results){
-           //if email is in use
-           emailUsed = results.length;
+       //   check if friend by getting fren id from fname, checking if fren id and user id in friends
+       var sqlConfirmedReceiever = "SELECT userB FROM `friends` WHERE `userA` =  '" + userID +"' AND `userB` = (SELECT id FROM users WHERE `fname`='" + receiver + "')"
 
-       //if email isn't in use, add user to db
-       if(emailUsed == 0) {
 
-           //Hash password
-           var hash = bcrypt.hashSync(pass, salt);
-           var sqlregister = "INSERT INTO `users`(`fname`,`lname`,`email`, `password`) VALUES ('" + fname + "','" + lname + "','" + email + "','" + hash + "')";
-           db.query(sqlregister, function(err, results) {
-               if(!err){
-                   welcomeEmail();
-               message = "Succesfully! Your account has been created.";
-               res.render('signup.ejs',{message: message});
-               }
-           });
+
+
+
+
+
+       db.query(usersFriendsIDs, function(err, results){
+         db.query(receieverID, function(err, results){
+
+         }
        }
 
-     }
 
   // line below doesn't seem necessary
   //res.redirect('/dashboard');

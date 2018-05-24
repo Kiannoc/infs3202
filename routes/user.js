@@ -11,17 +11,16 @@ exports.signup = function(req, res){
       //Store post fields into variables
       var post  = req.body;
       var emailUsed;
-
-       var toTrim = [
-         email= post.email,
-         pass= post.password,
-         fname= post.first_name,
-         lname= post.last_name,
-     ];
-
-       for(i = 0; i < toTrim.length; i++) {
-         toTrim[i] = toTrim[i].trim();
-       }
+      //trim whitespace from fields
+      var toTrim = [
+        email= post.email,
+        pass= post.password,
+        fname= post.first_name,
+        lname= post.last_name,
+      ];
+      for(i = 0; i < toTrim.length; i++) {
+        toTrim[i] = toTrim[i].trim();
+      }
 
        /*trim whitespace from fields (possible for loop here)
        fname = fname.trim();
