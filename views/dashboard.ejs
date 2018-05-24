@@ -144,13 +144,21 @@
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          var friends = this.response;
-          document.getElementById("demo").innerHTML = friends;
+          var friends = JSON.parse(this.response);
+          myFunction(friends);
         }
       };
       xmlhttp.open("GET", "/kianajax", true);
       xmlhttp.send();
     }
+
+    function myFunction(friends) {
+    var out = "";
+    for(var i = 0; i < friends.length; i++) {
+        out += '<h1>' + friends[i].fname + '</h1>'
+    }
+    document.getElementById("demo").innerHTML = out;
+}
     </script>
 
     <!-- Bootstrap core JavaScript

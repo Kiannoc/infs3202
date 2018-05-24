@@ -8,6 +8,6 @@ exports.kianajax = function(req, res, next){
     db.query(sqlFriendInfo, function(err, results){
         var friends = results;
         console.log(friends);
-        res.send({friends:friends});
+        res.json(friends);
     });
 };
