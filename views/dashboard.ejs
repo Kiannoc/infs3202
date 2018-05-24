@@ -9,21 +9,16 @@
 
     <title>Swapsie - Home</title>
 
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+  	<!-- Latest compiled and minified CSS -->
+  	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
-	<!-- Dashboard styling -->
-	<link rel="stylesheet" href="/stylesheets/dashboard.css">
-
+  	<!-- Dashboard styling -->
+  	<link rel="stylesheet" href="/stylesheets/dashboard.css">
   </head>
-
 
   <body>
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"><%=user[0].fname%></a>
-      <!-- SEARCH BAR
-
-      -->
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
           <a class="nav-link" href="/logout">Sign out</a>
@@ -64,9 +59,6 @@
 
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Friends</span>
-              <a class="d-flex align-items-center text-muted" href="#"> <!-- FUNTION DATABASE add friends-->
-                <!-- <span data-feather="plus-circle"></span> -->
-              </a>
             </h6>
             <ul class="nav flex-column mb-2">
               <% for(var i = 0; i < friends.length; i ++) { %>
@@ -77,8 +69,14 @@
                 </a>
               </li>
               <% } %>
+<<<<<<< HEAD
               <li class="nav-item">
                 <input class="form-control form-control-dark w-100" type="text" placeholder="Add Friend" aria-label="Search">
+=======
+              <li class="nav-item">                                                                       <!-- FUNTION DATABASE add friends-->
+                <input class="form-control form-control-dark w-100" type="text" placeholder="Add Friend" aria-label="Search">
+
+>>>>>>> shout-to-db
               </li>
             </ul>
           </div>
@@ -187,7 +185,7 @@
         <h4 class="modal-title">New Shout</h4>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" role="form" method="post" action="/shout" onSubmit="return checkblank(this);">
+        <form class="form-horizontal" role="form" method="post" action="/shout">
             <div class="form-group">
                 <label for="receiver" class="col-md-3 control-label">Receiver</label>
                 <div class="col-md-9">
@@ -195,9 +193,15 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="amount" class="col-md-3 control-label">Amount</label>
+                <label for="amount" class="col-md-3 control-label">Total Amount</label>
                 <div class="col-md-9">
                   <input type="number" class="form-control" name="amount" placeholder="00.00">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="percentage" class="col-md-3 control-label">Percentage Owed by Receiver (out of 100)</label>
+                <div class="col-md-9">
+                  <input type="number" class="form-control" name="percentage" placeholder="from 1 to 100">
                 </div>
             </div>
             <div class="form-group">

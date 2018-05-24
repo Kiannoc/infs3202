@@ -1,3 +1,4 @@
+var validator = require('validator');
 var userID;
 exports.dashboard = function(req, res, next){
     //console.log(req.session.userId);
@@ -23,13 +24,77 @@ exports.dashboard = function(req, res, next){
             //Query for users info
             var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
             db.query(sql, function(err, results){
-                res.render('dashboard.ejs', {user:results, friends:friends, shouts:shouts});    
-            }); 
+                res.render('dashboard.ejs', {user:results, friends:friends, shouts:shouts});
+            });
         });
     });
 }
 };
 
+exports.shout = function(req, res, next){
+  /* IF ADDING GET METHOD, UNCOMMENT AND ALTER BELOW:
+  if(req.method != "POST"){
+      errmessage = "Invalid Form Input";
+      res.render('signup.ejs', {errmessage:errmessage});
+    }
+  */
+
+  userID = req.session.userId;
+
+  // Collect field form data
+  var post  = req.body;
+  toTrim = [
+    receiver = post.receiver,
+    amount = post.amount,
+    percentage = post.percentage,
+    description = post.description
+  ];
+
+  // trim field form data
+  for(i = 0; i < toTrim.length; i++) {
+    toTrim[i] = toTrim[i].trim();
+  }
+
+  //LOGIC: booleans - field form data is valid
+  var receiverValid = validator.isLength(receiver, {min: 1})
+                  && validator.isAlpha(receiver);
+  var amountValid = validator.isLength(amount, {min: 1})
+                && validator.isNumeric(amount)
+                && (validator.isFloat(amount, {min: 0.01})
+                    || validator.isInt(amount, {min: 0}));
+  var percentageValid = validator.isLength(percentage, {min: 1})
+                    && validator.isNumeric(percentage)
+                    && (validator.isFloat(percentage, {min: 0.01, max: 100.00})
+                        || validator.isInt(percentage, {min: 1, max: 100}));
+  var descriptionValid = validator.isLength(description, {min: 3})
+                    && validator.isAlpha(description));
+  //all fields
+  var fieldsValid = receiverValid && amountValid && percentageValid
+                    && descriptionValid;
+
+  // Check if all entered fields are valid
+  if(fieldsValid) {
+
+       // check if receiver is a friend
+       //   check if friend by getting fren id from fname, checking if fren id and user id in friends
+       var sqlConfirmedReceiever = "SELECT userB FROM `friends` WHERE `userA` =  '" + userID +"' AND `userB` = (SELECT id FROM users WHERE `fname`='" + receiver + "')"
+
+
+
+
+
+
+
+       db.query(usersFriendsIDs, function(err, results){
+         db.query(receieverID, function(err, results){
+
+         }
+       }
+
+
+  // line below doesn't seem necessary
+  //res.redirect('/dashboard');
+}
 
 //----IGNORE FOR NOW ---///
 //--------HELPER FUNCTIONS --------//
