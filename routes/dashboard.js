@@ -74,21 +74,12 @@ exports.shout = function(req, res, next){
 
   // Check if all entered fields are valid
   if(fieldsValid) {
-
        // check if receiver is a friend
        //   check if friend by getting fren id from fname, checking if fren id and user id in friends
        var sqlConfirmedReceiever = "SELECT userB FROM `friends` WHERE `userA` =  '" + userID +"' AND `userB` = (SELECT id FROM users WHERE `fname`='" + receiver + "')"
 
-
-
-
-
-
-
        db.query(usersFriendsIDs, function(err, results){
-         db.query(receieverID, function(err, results){
-
-         }
+         
        }
 
 
