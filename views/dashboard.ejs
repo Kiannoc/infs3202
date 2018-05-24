@@ -45,6 +45,12 @@
               </a>
         </h6>
               <li class="nav-item">
+                <a class="nav-link" >
+                  <span data-feather="minus"></span>
+                  Balance: <%=balance%><!-- FUNCTION DATABASE -->
+                </a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link">
                   <span data-feather="plus"></span>
                   To you: <%=owed[0].totalOwed%> <!-- FUNCTION DATABASE -->
@@ -146,7 +152,7 @@
         out += '<tr>' +
           '<td>' + shouts[i].date + '</td>' +
           '<td>' + shouts[i].description + '</td>' +
-          '<td>' + shouts[i].price + '</td>' +
+          '<td>$' + shouts[i].price + '</td>' +
           '<td>' + shouts[i].paid + '</td>' +
           '</tr>'
         }

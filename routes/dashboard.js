@@ -1,5 +1,4 @@
 var validator = require('validator');
-var userID;
 
 exports.dashboard = function(req, res, next){
     //console.log(req.session.userId);
@@ -11,6 +10,7 @@ exports.dashboard = function(req, res, next){
         res.redirect('/login');
       }
     }
+    if(userID != null){
    //Query for friends data
     var sqlFriendInfo="SELECT users.id AS id, users.fname as fname, users.lname AS lname FROM users JOIN friends ON users.id = friends.userB WHERE friends.userA=" +userID;
     db.query(sqlFriendInfo, function(err, results) {
@@ -26,23 +26,26 @@ exports.dashboard = function(req, res, next){
           var sqlOwed = "SELECT SUM(price) AS totalOwed FROM shout WHERE buyer =" + userID;
           db.query(sqlOwed, function(err, results){
             var owed = results;
-            console.log(owed);
 
               //Query for amount owing
             var sqlOwing = "SELECT SUM(price) AS totalOwing FROM shout WHERE receiver =" + userID;
             db.query(sqlOwing, function(err, results){
               var owing = results;
-              console.log(owing);
+              console.log(owed[0].totalOwed);
+              console.log(owing[0].totalOwing);
+              var balance = owed[0].totalOwed - owing[0].totalOwing;
+              console.log(balance);
 
                 //Query for users info
                 var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
                 db.query(sql, function(err, results){
-                    res.render('dashboard.ejs', {user:results, friends:friends, shouts:shouts, owed, owing});
+                    res.render('dashboard.ejs', {user:results, friends:friends, shouts:shouts, owed, owing, balance});
                 });
               });
             });
         });
     });
+  }
 };
 
 
