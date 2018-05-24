@@ -10,7 +10,7 @@ exports.dashboard = function(req, res, next){
    }
 
    var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
-   
+
 //    //Quuery for friends id's
 //    var sqlFriendId="SELECT userB FROM `friends` WHERE `userA`='"+userID+"'";
 //     db.query(sqlFriendId, function(err, results){
@@ -28,20 +28,25 @@ exports.dashboard = function(req, res, next){
 //     console.log(results2);
 
    db.query(sql, function(err, results){
-      res.render('dashboard.ejs', {user:results});    
-   });       
+      res.render('dashboard.ejs', {user:results});
+   });
+};
+
+exports.shout = function(req, res, next) {
+  
+  res.redirect('/dashboard');
 };
 
 //--------HELPER FUNCTIONS --------//
 function friendList(userID, res) {
     var userA = userID;
-    
+
     //Query for for friends userId's of specified User
     var sqlFriendId="SELECT userB FROM `friends` WHERE `userA`='"+userA+"'";
     db.query(sqlFriendId, function(err, results){
         results1 = results;
     });
-            
+
     // //For each friend found, retrieve their information
     // for(i = 0; i < results.length; i++){
     //     console.log("This is for loop log: " + results[i].userB);

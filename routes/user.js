@@ -137,7 +137,7 @@ exports.dashboard = function(req, res, next){
 
   var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
 
- 
+
   db.query(sql, function(err, results){
      res.render('dashboard.ejs', {user:results});
   });
@@ -149,8 +149,7 @@ exports.logout=function(req,res){
   })
 };
 
-//-----------Helper Functions -------//
-
+//-----------------------------------------------Helper Functions -------------
  function welcomeEmail() {
     console.log("This is being run");
     var mailOptions = {
@@ -160,7 +159,7 @@ exports.logout=function(req,res){
         text: "Hello world ✔", // plaintext body
         html: "<b>Hello world ✔</b>" // html body
     }
-    
+
     // send mail with defined transport object
     smtp.sendMail(mailOptions, function(error, response){
         if(error){
@@ -168,7 +167,7 @@ exports.logout=function(req,res){
         }else{
             console.log("Message sent: " + response.message);
         }
-    
+
         // if you don't want to use this transport object anymore, uncomment following line
         //smtpTransport.close(); // shut down the connection pool, no more messages
     });
