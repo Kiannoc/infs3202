@@ -21,12 +21,16 @@ exports.dashboard = function(req, res, next){
             //Query for users info
             var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
             db.query(sql, function(err, results){
-                res.render('dashboard.ejs', {user:results, friends:friends, shouts:shouts});    
-            }); 
+                res.render('dashboard.ejs', {user:results, friends:friends, shouts:shouts});
+            });
         });
     });
 };
 
+exports.shout = function(req, res, next){
+
+  res.redirect('/dashboard');
+}
 
 //----IGNORE FOR NOW ---///
 //--------HELPER FUNCTIONS --------//
