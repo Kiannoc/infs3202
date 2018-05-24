@@ -68,7 +68,7 @@ app.get('/logout', user.logout);//call for logout
 app.get('/pdf', pdfgen.pdfgen);
 app.get('/kianajax', kianajax.kianajax);
 
-//app.post('/shout', dashboard.shout);//create shout
+app.post('/shout', dashboard.shout);//create shout
 
 
 //BELOW CURRENTLY USED FOR DEBUGGING... CHANGE TO A NICE 404 PAGE WHEN FINISHED

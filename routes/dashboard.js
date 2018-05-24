@@ -4,15 +4,15 @@ exports.dashboard = function(req, res, next){
     //console.log(req.session.userId);
 
     if(req.method == "GET") {
-   var user =  req.session.user
-   userID = req.session.userId;
-   if(userID == null){
-       res.redirect('/login');
-   }
-
-   //Quuery for friends data
+      var user =  req.session.user
+      userID = req.session.userId;
+      if(userID == null){
+        res.redirect('/login');
+      }
+    }
+   //Query for friends data
     var sqlFriendInfo="SELECT users.id AS id, users.fname as fname, users.lname AS lname FROM users JOIN friends ON users.id = friends.userB WHERE friends.userA=" +userID;
-    db.query(sqlFriendInfo, function(err, results){
+    db.query(sqlFriendInfo, function(err, results) {
         var friends = results;
 
         //Query for shouts data
@@ -28,17 +28,9 @@ exports.dashboard = function(req, res, next){
             });
         });
     });
-}
 };
 
 exports.shout = function(req, res, next){
-  /* IF ADDING GET METHOD, UNCOMMENT AND ALTER BELOW:
-  if(req.method != "POST"){
-      errmessage = "Invalid Form Input";
-      res.render('signup.ejs', {errmessage:errmessage});
-    }
-  */
-
   userID = req.session.userId;
 
   // Collect field form data
@@ -67,32 +59,40 @@ exports.shout = function(req, res, next){
                     && (validator.isFloat(percentage, {min: 0.01, max: 100.00})
                         || validator.isInt(percentage, {min: 1, max: 100}));
   var descriptionValid = validator.isLength(description, {min: 3})
-                    && validator.isAlpha(description));
+                    && validator.isAlpha(description);
   //all fields
   var fieldsValid = receiverValid && amountValid && percentageValid
                     && descriptionValid;
 
   // Check if all entered fields are valid
   if(fieldsValid) {
-       // check if receiver is a friend
-       //   check if friend by getting fren id from fname, checking if fren id and user id in friends
-       var sqlConfirmedReceiever = "SELECT userB FROM `friends` WHERE `userA` =  '" + userID +"' AND `userB` = (SELECT id FROM users WHERE `fname`='" + receiver + "')"
+    // check if receiver is a friend
+    //                           select receiver id from friends where receiver friend is user and receiever has name that matches id on users friends list
+    var sqlConfirmedReceiever = "SELECT userB FROM `friends` WHERE `userA` =  '" + userID +"' AND `userB` = (SELECT id FROM users WHERE `fname`='" + receiver + "')";
+    db.query(sqlConfirmedReceiever, function(err, receiverID){
+      //check if the receiever is confirmed to have friendID
+      if(!err && receiverID) {
+        var sqlInsertShout = "INSERT INTO `shouts`(`buyer`,`description`,`price`,`date`) VALUES ('" + userID + "','" + description + "','" + amount + "', CURDATE())";
+        db.query(sqlregister, function(err, results) {
+          if(!err){
+            res.redirect('/dashboard');
+          }
+        });
+      }
+    });
+  }
+};
 
-       db.query(usersFriendsIDs, function(err, results){
-         
-       }
 
 
-  // line below doesn't seem necessary
-  //res.redirect('/dashboard');
-}
+
 
 //----IGNORE FOR NOW ---///
 //--------HELPER FUNCTIONS --------//
 function friendList(userID, res) {
     var userA = userID;
 
-    //Query for for friends userId's of specified User
+    //Query for for friends userID's of specified User
     var sqlFriendId="SELECT userB FROM `friends` WHERE `userA`='"+userA+"'";
     db.query(sqlFriendId, function(err, results){
         results1 = results;
