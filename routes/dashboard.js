@@ -1,5 +1,6 @@
 var validator = require('validator');
 var userID;
+
 exports.dashboard = function(req, res, next){
     //console.log(req.session.userId);
 
@@ -32,6 +33,7 @@ exports.dashboard = function(req, res, next){
 
 exports.shout = function(req, res, next){
   userID = req.session.userId;
+  errmessage = '';
 
   // Collect field form data
   var post  = req.body;
@@ -72,8 +74,8 @@ exports.shout = function(req, res, next){
     db.query(sqlConfirmedReceiever, function(err, receiverID){
       //check if the receiever is confirmed to have friendID
       if(!err && receiverID) {
-        var sqlInsertShout = "INSERT INTO `shouts`(`buyer`,`description`,`price`,`date`) VALUES ('" + userID + "','" + description + "','" + amount + "', CURDATE())";
-        db.query(sqlregister, function(err, results) {
+        var sqlInsertShout = "INSERT INTO `shout`(`buyer`,`description`,`price`,`date`) VALUES ('" + userID + "','" + description + "','" + amount + "', CURDATE())";
+        db.query(sqlInsertShout, function(err, results) {
           if(!err){
             res.redirect('/dashboard');
           }
