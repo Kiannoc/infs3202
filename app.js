@@ -19,7 +19,7 @@ var connection = mysql.createConnection({
   host:'localhost',
   user:'kianluke3202',
   password: 'pass123',
-  database:'swapsiedb'
+  database:'stingedb'
 });
 
 connection.connect();

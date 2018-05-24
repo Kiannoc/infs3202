@@ -17,15 +17,29 @@ exports.dashboard = function(req, res, next){
         var friends = results;
 
         //Query for shouts data
-        var sqlShoutInfo = "SELECT * FROM shout JOIN receiveshout ON shout.shoutID = receiveshout.shoutID WHERE buyer =" + userID + " OR receiveshout.receiver =" +userID;
+        var sqlShoutInfo = "SELECT * FROM shout WHERE buyer =" + userID + " OR receiver =" +userID;
         db.query(sqlShoutInfo, function(err, results){
         var shouts = results;
         console.log(shouts);
 
-            //Query for users info
-            var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
-            db.query(sql, function(err, results){
-                res.render('dashboard.ejs', {user:results, friends:friends, shouts:shouts});
+          //Query for amount owed
+          var sqlOwed = "SELECT SUM(price) AS totalOwed FROM shout WHERE buyer =" + userID;
+          db.query(sqlOwed, function(err, results){
+            var owed = results;
+            console.log(owed);
+
+              //Query for amount owing
+            var sqlOwing = "SELECT SUM(price) AS totalOwing FROM shout WHERE receiver =" + userID;
+            db.query(sqlOwing, function(err, results){
+              var owing = results;
+              console.log(owing);
+
+                //Query for users info
+                var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
+                db.query(sql, function(err, results){
+                    res.render('dashboard.ejs', {user:results, friends:friends, shouts:shouts, owed, owing});
+                });
+              });
             });
         });
     });
@@ -71,50 +85,33 @@ exports.shout = function(req, res, next){
 
   // Check if all entered fields are valid
   if(fieldsValid) {
+    console.log("fields are valid");
     // check if receiver is a friend
     // Query: Match user and Receiver as Friends by ID
     var sqlConfirmedReceiever = "SELECT userB FROM `friends` WHERE `userA` =  '" + userID +"' AND `userB` = (SELECT id FROM users WHERE `fname`='" + receiver + "')";
     db.query(sqlConfirmedReceiever, function(err, receiverID){
       //check if the receiever is confirmed to have a friend with receiverID
+      
       if(!err && receiverID) {
+        console.log("friend confirmed");
         //Insert new shout from data
-        var sqlInsertShout = "INSERT INTO `shout`(`buyer`,`description`,`price`,`date`) VALUES ('" + userID + "','" + description + "','" + amount + "', CURDATE())";
+        console.log(userID);
+        console.log(receiverID[0].userB);
+        console.log(description);
+        console.log(percentage);
+        console.log(amount);
+
+        var sqlInsertShout = "INSERT INTO `shout`(`buyer`, `receiver`,`description`,`price`, `percentage`,`date`) VALUES ('" + userID + "', '" + receiverID[0].userB + "','" + description + "','" + amount + "', '" + percentage + "', CURDATE())";
         db.query(sqlInsertShout, function(err, results) {
           if(!err) {
-            //Get shout ID
-            var sqlGetShoutId = "SELECT shoutID FROM `shout` WHERE `buyer`= '" + userID + "' AND `description` = '" + description + "' AND `price` = '" + amount + "' AND `date`= CURDATE()";
-            db.query(sqlGetShoutId, function(err, shoutID) {
-              if(!err) {
-                //Insert shout receivement
-                var sqlInsertReceivesShout = "INSERT INTO `receiveshout`(`shoutID`, `receiver`, `percentage`) VALUES ('" + shoutID + "','" + receiverID + "','" + percentage + "')";
-                db.query(sqlInsertReceivesShout, function(err, results) {
-                  if(!err) {
-                    //res.redirect('/logout')
+            console.log("query inserted");
                     res.redirect('/dashboard');
-                  } else {
-                    //Error inserting shout receievment
-                    //res.redirect('/dashboard');
-                    res.redirect('/logout')
-                  }
+                  } 
                 });
-              } else {
-                //Error getting shout ID
-                res.redirect('/logout')
               }
             });
-          } else {
-            //Error inserting shout from data
-            res.redirect('/logout')
-          }
-          });
-      } else {
-        //Error checking if reciever is friend
-        res.redirect('/logout')
-      }
-    });
-  }
-};
-
+          } 
+          };
 
 
 
