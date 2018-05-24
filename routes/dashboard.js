@@ -1,6 +1,4 @@
 var userID;
-var results1;
-var results2 = ["this isn't working"];
 exports.dashboard = function(req, res, next){
     //console.log(req.session.userId);
    var user =  req.session.user
@@ -9,29 +7,28 @@ exports.dashboard = function(req, res, next){
        res.redirect('/login');
    }
 
-   var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
-   
-//    //Quuery for friends id's
-//    var sqlFriendId="SELECT userB FROM `friends` WHERE `userA`='"+userID+"'";
-//     db.query(sqlFriendId, function(err, results){
-//         results1 = results;
-//         console.log(results1);
-//     });
+   //Quuery for friends data
+    var sqlFriendInfo="SELECT users.id AS id, users.fname as fname, users.lname AS lname FROM users JOIN friends ON users.id = friends.userB WHERE friends.userA=" +userID;
+    db.query(sqlFriendInfo, function(err, results){
+        var friends = results;
 
-//     //For Each id retrieve friend info
-//     for(i=0; i < results1.length; i++){
-//         var sqlFriendInfo="SELECT id, fname, lname FROM `users` WHERE `id`='"+results1[i].userB+"'";
-//         db.query(sqlFriendInfo, function(err, results){
-//             results2.push(results);
-//         });
-//     }
-//     console.log(results2);
+        //Query for shouts data
+        var sqlShoutInfo = "SELECT * FROM shout JOIN receiveshout ON shout.shoutID = receiveshout.shoutID WHERE buyer =" + userID + " OR receiveshout.receiver =" +userID;
+        db.query(sqlShoutInfo, function(err, results){
+        var shouts = results;
+        console.log(shouts);
 
-   db.query(sql, function(err, results){
-      res.render('dashboard.ejs', {user:results});    
-   });       
+            //Query for users info
+            var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
+            db.query(sql, function(err, results){
+                res.render('dashboard.ejs', {user:results, friends:friends, shouts:shouts});    
+            }); 
+        });
+    });
 };
 
+
+//----IGNORE FOR NOW ---///
 //--------HELPER FUNCTIONS --------//
 function friendList(userID, res) {
     var userA = userID;
