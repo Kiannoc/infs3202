@@ -12,22 +12,16 @@ exports.signup = function(req, res){
       var post  = req.body;
       var emailUsed;
       //trim whitespace from fields
-      var toTrim = [
+      var toProcess = [
         email= post.email,
         pass= post.password,
         fname= post.first_name,
         lname= post.last_name,
       ];
-      for(i = 0; i < toTrim.length; i++) {
-        toTrim[i] = toTrim[i].trim();
+      for(i = 0; i < toProcess.length; i++) {
+        toProcess[i] = toProcess[i].trim();
+        toProcess[i] = toProcess[i].toLowerCase();
       }
-
-       /*trim whitespace from fields (possible for loop here)
-       fname = fname.trim();
-       lname = lname.trim();
-       email = email.trim();
-       pass = pass.trim();
-       */
 
        //check if form fields are valid//
        if(validator.isEmail(email) &&
@@ -60,7 +54,7 @@ exports.signup = function(req, res){
             }
             else {
                 errmessage = "Email already in use";
-                    res.render('signup.ejs',{errmessage: errmessage});
+                res.render('signup.ejs',{errmessage: errmessage});
             }
             });
 

@@ -39,7 +39,7 @@ exports.shout = function(req, res, next){
 
   // Collect field form data
   var post  = req.body;
-  toTrim = [
+  toProcess = [
     receiver = post.receiver,
     amount = post.amount,
     percentage = post.percentage,
@@ -47,8 +47,9 @@ exports.shout = function(req, res, next){
   ];
 
   // trim field form data
-  for(i = 0; i < toTrim.length; i++) {
-    toTrim[i] = toTrim[i].trim();
+  for(i = 0; i < toProcess.length; i++) {
+    toProcess[i] = toProcess[i].trim();
+    //toProcess[i] = toProcess[i].toLowerCase();
   }
 
   //LOGIC: booleans - field form data is valid
@@ -71,17 +72,44 @@ exports.shout = function(req, res, next){
   // Check if all entered fields are valid
   if(fieldsValid) {
     // check if receiver is a friend
-    //                           select receiver id from friends where receiver friend is user and receiever has name that matches id on users friends list
+    // Query: Match user and Receiver as Friends by ID
     var sqlConfirmedReceiever = "SELECT userB FROM `friends` WHERE `userA` =  '" + userID +"' AND `userB` = (SELECT id FROM users WHERE `fname`='" + receiver + "')";
     db.query(sqlConfirmedReceiever, function(err, receiverID){
-      //check if the receiever is confirmed to have friendID
+      //check if the receiever is confirmed to have a friend with receiverID
       if(!err && receiverID) {
+        //Insert new shout from data
         var sqlInsertShout = "INSERT INTO `shout`(`buyer`,`description`,`price`,`date`) VALUES ('" + userID + "','" + description + "','" + amount + "', CURDATE())";
         db.query(sqlInsertShout, function(err, results) {
-          if(!err){
-            res.redirect('/dashboard');
+          if(!err) {
+            //Get shout ID
+            var sqlGetShoutId = "SELECT shoutID FROM `shout` WHERE `buyer`= '" + userID + "' AND `description` = '" + description + "' AND `price` = '" + amount + "' AND `date`= CURDATE()";
+            db.query(sqlGetShoutId, function(err, shoutID) {
+              if(!err) {
+                //Insert shout receivement
+                var sqlInsertReceivesShout = "INSERT INTO `receiveshout`(`shoutID`, `receiver`, `percentage`) VALUES ('" + shoutID + "','" + receiverID + "','" + percentage + "')";
+                db.query(sqlInsertReceivesShout, function(err, results) {
+                  if(!err) {
+                    //res.redirect('/logout')
+                    res.redirect('/dashboard');
+                  } else {
+                    //Error inserting shout receievment
+                    //res.redirect('/dashboard');
+                    res.redirect('/logout')
+                  }
+                });
+              } else {
+                //Error getting shout ID
+                res.redirect('/logout')
+              }
+            });
+          } else {
+            //Error inserting shout from data
+            res.redirect('/logout')
           }
-        });
+          });
+      } else {
+        //Error checking if reciever is friend
+        res.redirect('/logout')
       }
     });
   }
