@@ -8,19 +8,27 @@ exports.signup = function(req, res){
     var salt = bcrypt.genSaltSync(10);
     //IF REQUEST IS POST
     if(req.method == "POST"){
-        //Store post fields into variables
-       var post  = req.body;
-       var email= post.email;
-       var pass= post.password;
-       var fname= post.first_name;
-       var lname= post.last_name;
-       var emailUsed;
+      //Store post fields into variables
+      var post  = req.body;
+      var emailUsed;
 
-       //trim whitespace from fields (possible for loop here)
+       var toTrim = [
+         email= post.email,
+         pass= post.password,
+         fname= post.first_name,
+         lname= post.last_name,
+     ];
+
+       for(i = 0; i < toTrim.length; i++) {
+         toTrim[i] = toTrim[i].trim();
+       }
+
+       /*trim whitespace from fields (possible for loop here)
        fname = fname.trim();
        lname = lname.trim();
        email = email.trim();
        pass = pass.trim();
+       */
 
        //check if form fields are valid//
        if(validator.isEmail(email) &&
