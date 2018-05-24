@@ -62,28 +62,6 @@
                 </a>
               </li>
 
-			  <!--
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="users"></span>
-                  Customers
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="bar-chart-2"></span>
-                  Reports
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="layers"></span>
-                  Integrations
-                </a>
-              </li>
-            </ul>
-            -->
-
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Friends</span>
               <a class="d-flex align-items-center text-muted" href="#"> <!-- FUNTION DATABASE add friends-->
@@ -99,6 +77,9 @@
                 </a>
               </li>
               <% } %>
+              <li class="nav-item">
+                <input class="form-control form-control-dark w-100" type="text" placeholder="Add Friend" aria-label="Search">
+              </li>
             </ul>
           </div>
         </nav>
@@ -111,10 +92,6 @@
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#shoutModal">New Shout</button>
-                <!--
-                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
-                <button class="btn btn-sm btn-outline-secondary">CREATE NEW SHOUT</button>
-                -->
                 <form method="get" action="/pdf">
                   <button class="btn btn-sm btn-outline-secondary">Export PDF</button> <!-- FUNCTION PDF -->
                 </form>
