@@ -31,6 +31,8 @@ exports.dashboard = function(req, res, next){
     });
 };
 
+
+//-----------SHOUT FORM PROCESSING -----------//
 exports.shout = function(req, res, next){
   userID = req.session.userId;
   errmessage = '';

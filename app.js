@@ -31,7 +31,6 @@ app.use(session({
   secret: 'lukesmells',
   resave: false,
   saveUninitialized: true,
-  cookie: {maxAge: 60000}
 }));
 
 // create reusable transport method (opens pool of SMTP connections)

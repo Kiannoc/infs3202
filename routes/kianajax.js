@@ -6,10 +6,10 @@ exports.kianajax = function(req, res){
    console.log(friend);
 
    //Quuery for friends data
-    var sqlFriendInfo="SELECT users.id AS id, users.fname as fname, users.lname AS lname FROM users JOIN friends ON users.id = friends.userB WHERE friends.userA=" +userID;
-    db.query(sqlFriendInfo, function(err, results){
-        var friends = results;
-        console.log(friends);
-        res.json(friends);
+   var sqlShoutInfo = "SELECT * FROM shout JOIN receiveshout ON shout.shoutID = receiveshout.shoutID WHERE (buyer =" + friend + " OR receiveshout.receiver =" +friend +") AND (buyer =" + userID + " OR receiveshout.receiver =" +userID+")";
+   db.query(sqlShoutInfo, function(err, results){
+       console.log(results);
+       console.log(userID);
+        res.json(results);
     });
 };

@@ -63,7 +63,7 @@
             <ul class="nav flex-column mb-2">
               <% for(var i = 0; i < friends.length; i ++) { %>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="#" onClick="loadShouts(<%=friends[i].id%>)">
                   <span data-feather="user"></span>
                   <%=friends[i].fname%>
                 </a>
@@ -104,7 +104,7 @@
               </thead>
 
 			  <!-- FUNCTION DATABASE shouts -->
-              <tbody>
+              <tbody id="shoutTable">
                 <% for(var i = 0; i < shouts.length; i ++) { %>
                 <% if (shouts[i].paid == 0) { %>
                 <tr class="danger">
@@ -117,13 +117,9 @@
                   <td><%=shouts[i].paid%></td>
                 </tr>
                 <% } %>
-                <tr>
               </tbody>
             </table>
           </div>
-          <button type="button" onclick="loadFriends()">Show Friends</button>
-    <br><br>
-    <h1 id="demo"></h1>
         </main>
       </div>
     </div>
@@ -132,24 +128,30 @@
 
 
     <script>
-    function loadFriends() {
+    function loadShouts(friendID) {
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          var friends = JSON.parse(this.response);
-          myFunction(friends);
+          var shouts = JSON.parse(this.response);
+          displayShouts(shouts);
         }
       };
-      xmlhttp.open("GET", "/kianajax?q=Kian", true);
+      xmlhttp.open("GET", "/kianajax?q=" + friendID, true);
       xmlhttp.send();
     }
 
-    function myFunction(friends) {
+    function displayShouts(shouts) {
     var out = "";
-    for(var i = 0; i < friends.length; i++) {
-        out += '<h1>' + friends[i].fname + '</h1>'
-    }
-    document.getElementById("demo").innerHTML = out;
+    for(var i = 0; i < shouts.length; i++) {
+        out += '<tr>' +
+          '<td>' + shouts[i].date + '</td>' +
+          '<td>' + shouts[i].description + '</td>' +
+          '<td>' + shouts[i].price + '</td>' +
+          '<td>' + shouts[i].paid + '</td>' +
+          '</tr>'
+        }
+    document.getElementById("shoutTable").innerHTML = out;
+    console.log(out);
 }
     </script>
 
