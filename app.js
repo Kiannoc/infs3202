@@ -8,6 +8,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var dashboard = require('./routes/dashboard');
 var pdfgen = require('./routes/pdfgen');
+var kianajax = require('./routes/kianajax');
 
 var app = express();
 var mysql = require('mysql');
@@ -65,8 +66,9 @@ app.post('/login', user.login);//call for login post
 app.get('/dashboard', dashboard.dashboard);//call for dashboard page after login
 app.get('/logout', user.logout);//call for logout
 app.get('/pdf', pdfgen.pdfgen);
+app.get('/kianajax', kianajax.kianajax);
 
-app.post('/shout', dashboard.shout);//create shout
+//app.post('/shout', dashboard.shout);//create shout
 
 
 //BELOW CURRENTLY USED FOR DEBUGGING... CHANGE TO A NICE 404 PAGE WHEN FINISHED

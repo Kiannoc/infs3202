@@ -136,30 +136,45 @@
 
 			  <!-- FUNCTION DATABASE shouts -->
               <tbody>
-                <tr>
-                  <td>14/05/2018</td>
-                  <td>Milk</td>
-                  <td>$-3.00</td>
-                  <td>Kian</td>
+                <% for(var i = 0; i < shouts.length; i ++) { %>
+                <% if (shouts[i].paid == 0) { %>
+                <tr class="danger">
+                  <% } else { %>
+                    <tr>
+                <% } %>
+                  <td><%=shouts[i].date%></td>
+                  <td><%=shouts[i].description%></td>
+                  <td>$<%=shouts[i].price%></td>
+                  <td><%=shouts[i].paid%></td>
                 </tr>
+                <% } %>
                 <tr>
-                  <td>7/05/2018</td>
-                  <td>Bread</td>
-                  <td>$+4.00</td>
-                  <td>Kian</td>
-                </tr>
-                <tr>
-                  <td>7/05/2018</td>
-                  <td>Testing stuff</td>
-                  <td>$+4.00</td>
-                  <td>Kian</td>
-                </tr>
               </tbody>
             </table>
           </div>
+          <button type="button" onclick="loadFriends()">Show Friends</button>
+    <br><br>
+    <h1 id="demo"></h1>
         </main>
       </div>
     </div>
+
+    <!---Kian Testing Ajax Stuff-->
+    
+
+    <script>
+    function loadFriends() {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var friends = this.response;
+          document.getElementById("demo").innerHTML = friends;
+        }
+      };
+      xmlhttp.open("GET", "/kianajax", true);
+      xmlhttp.send();
+    }
+    </script>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

@@ -1,6 +1,8 @@
 var userID;
 exports.dashboard = function(req, res, next){
     //console.log(req.session.userId);
+
+    if(req.method == "GET") {
    var user =  req.session.user
    userID = req.session.userId;
    if(userID == null){
@@ -25,6 +27,7 @@ exports.dashboard = function(req, res, next){
             }); 
         });
     });
+}
 };
 
 
