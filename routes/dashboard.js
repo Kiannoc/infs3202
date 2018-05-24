@@ -80,32 +80,34 @@ exports.shout = function(req, res, next){
         db.query(sqlInsertShout, function(err, results) {
           if(!err) {
             //Get shout ID
-            var sqlGetShoutId = "SELECT shoutID FROM 'shout' WHERE `buyer`= '" + userID + "' AND `description` = '" + description + "' AND `price` = '" + amount + "' AND `date`= CURDATE()";
+            var sqlGetShoutId = "SELECT shoutID FROM `shout` WHERE `buyer`= '" + userID + "' AND `description` = '" + description + "' AND `price` = '" + amount + "' AND `date`= CURDATE()";
             db.query(sqlGetShoutId, function(err, shoutID) {
               if(!err) {
                 //Insert shout receivement
                 var sqlInsertReceivesShout = "INSERT INTO `receiveshout`(`shoutID`, `receiver`, `percentage`) VALUES ('" + shoutID + "','" + receiverID + "','" + percentage + "')";
-                db.query(sqlInsertReceivesShout, function(err, shoutID) {
+                db.query(sqlInsertReceivesShout, function(err, results) {
                   if(!err) {
-                    res.redirect('/logout')
+                    //res.redirect('/logout')
+                    res.redirect('/dashboard');
                   } else {
                     //Error inserting shout receievment
-                    res.redirect('/dashboard');
+                    //res.redirect('/dashboard');
+                    res.redirect('/logout')
                   }
                 });
               } else {
                 //Error getting shout ID
-                res.redirect('/dashboard');
+                res.redirect('/logout')
               }
             });
           } else {
             //Error inserting shout from data
-            res.redirect('/dashboard');
+            res.redirect('/logout')
           }
           });
       } else {
         //Error checking if reciever is friend
-        res.redirect('/dashboard');
+        res.redirect('/logout')
       }
     });
   }
