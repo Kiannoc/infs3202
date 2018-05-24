@@ -56,15 +56,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(8080);
 
-//------ROUTING ----// 
+//------ROUTING ----//
 app.get('/', routes.index);//call for main index page
 app.get('/signup', user.signup);//call for signup page
-app.post('/signup', user.signup);//call for signup post 
+app.post('/signup', user.signup);//call for signup post
 app.get('/login', user.login);//call for login page
 app.post('/login', user.login);//call for login post
 app.get('/dashboard', dashboard.dashboard);//call for dashboard page after login
 app.get('/logout', user.logout);//call for logout
 app.get('/pdf', pdfgen.pdfgen);
+
+app.post('/shout', dashboard.shout);//create shout
 
 
 //BELOW CURRENTLY USED FOR DEBUGGING... CHANGE TO A NICE 404 PAGE WHEN FINISHED
