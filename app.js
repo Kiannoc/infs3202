@@ -66,6 +66,7 @@ app.get('/dashboard', dashboard.dashboard);//call for dashboard page after login
 app.get('/logout', user.logout);//call for logout
 app.get('/pdf', pdfgen.pdfgen);
 app.get('/kianajax', kianajax.kianajax);
+app.get('/suggestFriend', kianajax.friendSuggest);
 
 app.post('/shout', dashboard.shout);//create shout
 

@@ -11,6 +11,7 @@ exports.dashboard = function(req, res, next){
       }
     }
     if(userID != null){
+      console.log(userID);
    //Query for friends data
     var sqlFriendInfo="SELECT users.id AS id, users.fname as fname, users.lname AS lname FROM users JOIN friends ON users.id = friends.userB WHERE friends.userA=" +userID;
     db.query(sqlFriendInfo, function(err, results) {
@@ -23,7 +24,7 @@ exports.dashboard = function(req, res, next){
         console.log(shouts);
 
           //Query for amount owed
-          var sqlOwed = "SELECT SUM(price) AS totalOwed FROM shout WHERE buyer =" + userID;
+          var sqlOwed = "SELECT SUM(price) AS totalOwed FROM shout WHERE buyer =" + userID + " AND paid = 0";
           db.query(sqlOwed, function(err, results){
             var owed = results;
 
@@ -31,10 +32,7 @@ exports.dashboard = function(req, res, next){
             var sqlOwing = "SELECT SUM(price) AS totalOwing FROM shout WHERE receiver =" + userID;
             db.query(sqlOwing, function(err, results){
               var owing = results;
-              console.log(owed[0].totalOwed);
-              console.log(owing[0].totalOwing);
               var balance = owed[0].totalOwed - owing[0].totalOwing;
-              console.log(balance);
 
                 //Query for users info
                 var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";

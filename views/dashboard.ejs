@@ -46,20 +46,19 @@
         </h6>
               <li class="nav-item">
                 <a class="nav-link" >
-                  <span data-feather="minus"></span>
-                  Balance: <%=balance%><!-- FUNCTION DATABASE -->
+                  <h2>Balance: <%=balance%></h2><!-- FUNCTION DATABASE -->
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link">
                   <span data-feather="plus"></span>
-                  To you: <%=owed[0].totalOwed%> <!-- FUNCTION DATABASE -->
+                  OWED: <%=owed[0].totalOwed%> <!-- FUNCTION DATABASE -->
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" >
                   <span data-feather="minus"></span>
-                  By you: <%=owing[0].totalOwing%> <!-- FUNCTION DATABASE -->
+                  OWE: <%=owing[0].totalOwing%> <!-- FUNCTION DATABASE -->
                 </a>
               </li>
 
@@ -69,7 +68,7 @@
             <ul class="nav flex-column mb-2">
               <% for(var i = 0; i < friends.length; i ++) { %>
               <li class="nav-item">
-                <a class="nav-link" href="#" onClick="loadShouts(<%=friends[i].id%>)">
+                <a class="nav-link" href="javascript:void(0)" onClick="loadShouts(<%=friends[i].id%>)">
                   <span data-feather="user"></span>
                   <%=friends[i].fname%>
                 </a>
@@ -157,8 +156,20 @@
           '</tr>'
         }
     document.getElementById("shoutTable").innerHTML = out;
-    console.log(out);
-}
+    }
+
+    //--attempt use for friend suggestion --//
+    function friendSuggest(input) {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var shouts = JSON.parse(this.response);
+          document.getElementById("friendHint").innerHTML = this.responseText;
+        }
+      };
+      xmlhttp.open("GET", "/suggestFriend?q=" + input, true);
+      xmlhttp.send();
+    }
     </script>
 
     <!-- Bootstrap core JavaScript
