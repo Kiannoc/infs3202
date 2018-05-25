@@ -47,7 +47,7 @@ exports.signup = function(req, res){
                 db.query(sqlregister, function(err, results) {
                     if(!err){
                         welcomeEmail();
-                    message = "Succesfully! Your account has been created.";
+                    message = "Successfully! Your account has been created.";
                     res.render('signup.ejs',{message: message});
                     }
                 });
