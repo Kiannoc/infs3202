@@ -46,7 +46,7 @@ exports.signup = function(req, res){
                 var sqlregister = "INSERT INTO `users`(`fname`,`lname`,`email`, `password`) VALUES ('" + fname + "','" + lname + "','" + email + "','" + hash + "')";
                 db.query(sqlregister, function(err, results) {
                     if(!err){
-                        welcomeEmail();
+                        welcomeEmail(email);
                     message = "Successfully! Your account has been created.";
                     res.render('signup.ejs',{message: message});
                     }
@@ -151,11 +151,11 @@ exports.logout=function(req,res){
 };
 
 //-----------------------------------------------Helper Functions -------------
- function welcomeEmail() {
+ function welcomeEmail(email) {
     console.log("This is being run");
     var mailOptions = {
         from: "Kian Noctor ✔ <kian.noctor@gmail.com>", // sender address
-        to: "kian.noctor@hotmail.com", // list of receivers
+        to: email, // list of receivers
         subject: "New Account Created", // Subject line
         text: "Hello world ✔", // plaintext body
         html: "<b>Hello world ✔</b>" // html body
