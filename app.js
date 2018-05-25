@@ -18,7 +18,7 @@ var nodemailer = require('nodemailer');
 var connection = mysql.createConnection({
   host:'localhost',
   user:'kianluke3202',
-  password: 'pass123',
+  password: '',
   database:'stingedb'
 });
 
@@ -38,7 +38,7 @@ let smtpTransport = nodemailer.createTransport({
   service: "Gmail",
   auth: {
       user: "stinge3202@gmail.com",
-      pass: "infs3202"
+      pass: ""
   }
 });
 

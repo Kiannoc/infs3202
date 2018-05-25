@@ -77,7 +77,7 @@ exports.shout = function(req, res){
     // trim field form data
     for(i = 0; i < toProcess.length; i++) {
       toProcess[i] = toProcess[i].trim();
-      //toProcess[i] = toProcess[i].toLowerCase();
+      toProcess[i] = toProcess[i].toLowerCase();
     }
 
     //LOGIC: booleans - field form data is valid
@@ -99,7 +99,6 @@ exports.shout = function(req, res){
 
     // Check if all entered fields are valid
     if(fieldsValid) {
-      console.log("fields are valid");
       errmessage = '';
       // check if receiver is a friend
       // Query: Match user and Receiver as Friends by ID
@@ -107,26 +106,20 @@ exports.shout = function(req, res){
       db.query(sqlConfirmedReceiever, function(err, receiverID){
         //check if the receiever is confirmed to have a friend with receiverID
         if(!err && receiverID) {
-          console.log("friend confirmed");
           //Insert new shout from data
-          console.log(userID);
-          console.log(receiverID);
-          console.log(description);
-          console.log(percentage);
-          console.log(amount);
-
           var sqlInsertShout = "INSERT INTO `shout`(`buyer`, `receiver`,`description`,`price`, `percentage`,`date`) VALUES ('" + userID + "', '" + receiverID + "','" + description + "','" + amount + "', '" + percentage + "', CURDATE())";
           db.query(sqlInsertShout, function(err, results) {
             if(!err) {
-              console.log("query inserted");
-              //res.redirect('/dashboard');
+              res.redirect('/dashboard');
+            } else {
+              res.render('dashboard.ejs',{errmessage: "ERROR"});
             }
           });
         }
       });
     } else {
       res.render('dashboard.ejs',{errmessage: "ERROR"});
-      /*Field data not valid
+      /*Field data not valid, Return message on which form field caused error
       errorMessages = [
         recInv = "Receiver is not a valid selection.";
         amtInv = "Amount is not a valid selection.";
@@ -152,10 +145,6 @@ exports.shout = function(req, res){
     }
   } else {
     //If request is not POST
-    var userID = req.session.userId;
-    if(userID != null){
-        res.redirect('/dashboard');
-    }
    res.render('dashboard.ejs',{errmessage: errmessage});
   }
 
