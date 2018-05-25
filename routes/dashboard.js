@@ -17,6 +17,18 @@ exports.dashboard = function(req, res, next){
     db.query(sqlFriendInfo, function(err, results) {
         var friends = results;
 
+        /* SHOUTS DATA WITH NAMES
+        //Query for shouts data
+        var sqlShoutsTable="SELECT `shout`.`date`, buys.`buyer`, `shout`.`description`, `shout`.`percentage`, receives.`receiver`, `shout`.`price` "
+           +"FROM (SELECT `shout`.`shoutID` as buyerShoutID, `users`.`fname` AS buyer FROM `users`, `shout` WHERE `shout`.`buyer`=`users`.`id`)as buys,"
+           +"(SELECT `shout`.`shoutID` as receivesShoutID, `users`.`fname` AS receiver FROM `users`, `shout` WHERE `shout`.`receiver`=`users`.`id`)  as receives,"
+           +"`shout`"
+           +"WHERE receives.receivesShoutID = buys.buyerShoutID";
+        db.query(sqlShoutsTable, function(err, results) {
+          var date = results;
+          var shouts = {date:date};
+          */
+
         //Query for shouts data
         var sqlShoutInfo = "SELECT * FROM shout WHERE buyer =" + userID + " OR receiver =" +userID;
         db.query(sqlShoutInfo, function(err, results){
@@ -32,7 +44,7 @@ exports.dashboard = function(req, res, next){
             var sqlOwing = "SELECT SUM(price) AS totalOwing FROM shout WHERE receiver =" + userID;
             db.query(sqlOwing, function(err, results){
               var owing = results;
-              var balance = owed[0].totalOwed - owing[0].totalOwing;
+              var balance = (owed[0].totalOwed - owing[0].totalOwing).toFixed(2);
 
                 //Query for users info
                 var sql="SELECT * FROM `users` WHERE `id`='"+userID+"'";
